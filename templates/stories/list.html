@@ -206,4 +206,29 @@
   {% endfor %}
 </div>
 
-{% endblock %}
+<!-- 📄 PHÂN TRANG -->
+{% if page_obj.has_other_pages %}
+<div class="pagination-box">
+  {% if page_obj.has_previous %}
+  <a
+    class="btn"
+    href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+  >
+    <i class="fa-solid fa-arrow-left"></i> Trước
+  </a>
+  {% endif %}
+
+  <span class="pagination-current">
+    Trang {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+  </span>
+
+  {% if page_obj.has_next %}
+  <a
+    class="btn"
+    href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+  >
+    Sau <i class="fa-solid fa-arrow-right"></i>
+  </a>
+  {% endif %}
+</div>
+{% endif %} {% endblock %}

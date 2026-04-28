@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Đăng truyện</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <label>Ảnh bìa</label>
+  <input type="file" name="cover" /><br /><br />
+
+  <label>Tên truyện</label>
+  <input type="text" name="title" required />
+
+  <label>Tác giả</label>
+  <input type="text" name="author" required />
+
+  <label>Mô tả</label>
+  <textarea
+    name="description"
+    rows="6"
+    style="
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    "
+  ></textarea>
+
+  <br /><br />
+  <button type="submit" class="btn">Đăng truyện</button>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2>Xóa Chapter</h2>
+
+<p>Bạn chắc chắn muốn xóa chapter này?</p>
+
+<h3>{{ chapter.title }}</h3>
+
+<form method="post">
+  {% csrf_token %}
+  <button class="btn" type="submit" style="background: red">
+    Xác nhận xóa
+  </button>
+</form>
+
+<br />
+
+<a href="{% url 'chapter_detail' chapter.id %}">← Hủy</a>
+
+{% endblock %}

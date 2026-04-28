@@ -1,0 +1,134 @@
+{% extends 'base.html' %} {% block content %}
+
+<!-- ===== TIÊU ĐỀ CHAPTER ===== -->
+<div style="text-align: center; margin-bottom: 25px">
+  <h2 style="margin-bottom: 8px">{{ chapter.story.title }}</h2>
+  <h3 style="margin-top: 0">{{ chapter.title }}</h3>
+</div>
+
+<!-- ===== ĐIỀU HƯỚNG ĐẦU TRANG ===== -->
+<div class="chapter-nav">
+  {% if prev_chapter %}
+  <a class="btn" href="{% url 'chapter_detail' prev_chapter.id %}">
+    <i class="fa-solid fa-arrow-left"></i> Chapter trước
+  </a>
+  {% else %}
+  <span class="btn disabled-btn">
+    <i class="fa-solid fa-arrow-left"></i> Chapter trước
+  </span>
+  {% endif %}
+
+  <a class="btn btn-create" href="{% url 'story_detail' chapter.story.id %}">
+    <i class="fa-solid fa-list"></i> Danh sách
+  </a>
+
+  {% if next_chapter %}
+  <a class="btn" href="{% url 'chapter_detail' next_chapter.id %}">
+    Chapter sau <i class="fa-solid fa-arrow-right"></i>
+  </a>
+  {% else %}
+  <span class="btn disabled-btn">
+    Chapter sau <i class="fa-solid fa-arrow-right"></i>
+  </span>
+  {% endif %}
+</div>
+
+<!-- ===== DANH SÁCH CHAPTER ĐẦU TRANG ===== -->
+<div class="chapter-number-box">
+  <h3>Danh sách chapter</h3>
+
+  <div class="chapter-number-list">
+    {% for c in all_chapters %}
+    <a
+      href="{% url 'chapter_detail' c.id %}"
+      class="chapter-number {% if c.id == chapter.id %}active{% endif %}"
+    >
+      {{ c.chapter_number }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ===== NỘI DUNG CHAPTER ===== -->
+<div class="chapter-content">
+  {% if chapter.images.all %} {% for img in chapter.images.all %}
+  <img src="{{ img.image.url }}" class="reader-image" />
+  {% endfor %} {% else %}
+  <div class="chapter-text">{{ chapter.content|linebreaks }}</div>
+  {% endif %}
+</div>
+
+<!-- ===== ĐIỀU HƯỚNG CUỐI TRANG ===== -->
+<div class="chapter-nav bottom">
+  {% if prev_chapter %}
+  <a class="btn" href="{% url 'chapter_detail' prev_chapter.id %}">
+    <i class="fa-solid fa-arrow-left"></i> Chapter trước
+  </a>
+  {% else %}
+  <span class="btn disabled-btn">
+    <i class="fa-solid fa-arrow-left"></i> Chapter trước
+  </span>
+  {% endif %}
+
+  <a class="btn btn-create" href="{% url 'story_detail' chapter.story.id %}">
+    <i class="fa-solid fa-list"></i> Danh sách
+  </a>
+
+  {% if next_chapter %}
+  <a class="btn" href="{% url 'chapter_detail' next_chapter.id %}">
+    Chapter sau <i class="fa-solid fa-arrow-right"></i>
+  </a>
+  {% else %}
+  <span class="btn disabled-btn">
+    Chapter sau <i class="fa-solid fa-arrow-right"></i>
+  </span>
+  {% endif %}
+</div>
+
+<!-- ===== DANH SÁCH CHAPTER CUỐI TRANG ===== -->
+<div class="chapter-number-box">
+  <h3>Danh sách chapter</h3>
+
+  <div class="chapter-number-list">
+    {% for c in all_chapters %}
+    <a
+      href="{% url 'chapter_detail' c.id %}"
+      class="chapter-number {% if c.id == chapter.id %}active{% endif %}"
+    >
+      {{ c.chapter_number }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+<div style="text-align: center; margin-top: 25px">
+  <a href="{% url 'story_detail' chapter.story.id %}" class="back-link">
+    <i class="fa-solid fa-arrow-left"></i> Quay lại truyện
+  </a>
+</div>
+
+<hr style="margin: 35px 0" />
+
+<!-- ===== BÌNH LUẬN ===== -->
+<h3>Bình luận</h3>
+
+{% if user.is_authenticated %}
+<form method="post" style="margin-bottom: 20px">
+  {% csrf_token %}
+  <textarea name="content" rows="3" placeholder="Nhập bình luận..."></textarea>
+
+  <button class="btn" type="submit">
+    <i class="fa-solid fa-paper-plane"></i> Gửi bình luận
+  </button>
+</form>
+{% else %}
+<p>Bạn cần đăng nhập để bình luận.</p>
+{% endif %} {% for cmt in comments %}
+<div class="comment-box">
+  <strong>{{ cmt.user.username }}</strong>
+  <span class="muted">{{ cmt.created_at|date:"d/m/Y H:i" }}</span>
+  <p>{{ cmt.content }}</p>
+</div>
+{% empty %}
+<p class="muted">Chưa có bình luận</p>
+{% endfor %} {% endblock %}

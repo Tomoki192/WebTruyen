@@ -1,0 +1,209 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="filter-box">
+  <form method="get" style="display: flex; gap: 10px; flex-wrap: wrap">
+    <input
+      type="text"
+      name="q"
+      placeholder="Tìm truyện theo tên hoặc tác giả..."
+      value="{{ query|default:'' }}"
+      class="search-input"
+    />
+
+    {% if category_id %}
+    <input type="hidden" name="category" value="{{ category_id }}" />
+    {% endif %} {% if sort %}
+    <input type="hidden" name="sort" value="{{ sort }}" />
+    {% endif %}
+
+    <button class="btn" type="submit">
+      <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+    </button>
+  </form>
+
+  <div class="filter-row">
+    <strong>Thể loại:</strong>
+    <a href="{% url 'home' %}" class="tag">Tất cả</a>
+
+    {% for cate in categories %}
+    <a
+      href="?category={{ cate.id }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+      class="tag {% if category_id == cate.id|stringformat:'s' %}active{% endif %}"
+    >
+      {{ cate.name }}
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="filter-row">
+    <strong>Sắp xếp:</strong>
+
+    <a
+      href="?sort=new{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}"
+      class="tag {% if sort == 'new' %}active{% endif %}"
+    >
+      Mới nhất
+    </a>
+
+    <a
+      href="?sort=old{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}"
+      class="tag {% if sort == 'old' %}active{% endif %}"
+    >
+      Cũ nhất
+    </a>
+  </div>
+</div>
+
+<!-- 🔥 SLIDER -->
+<h2 class="section-title">Truyện đề cử ›</h2>
+
+<div class="recommend-slider">
+  <button
+    class="slider-btn slider-left"
+    type="button"
+    onclick="slideRecommend(-1)"
+  >
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+
+  <div class="recommend-wrapper" id="recommendSlider">
+    <div class="recommend-track">
+      {% for story in recommended_stories %}
+      <a href="{% url 'story_detail' story.id %}" class="recommend-card">
+        {% if story.cover %}
+        <img src="{{ story.cover.url }}" alt="{{ story.title }}" />
+        {% else %}
+        <div class="no-cover">📖</div>
+        {% endif %}
+
+        <div class="recommend-info">
+          <div class="recommend-title">{{ story.title }}</div>
+          <div class="recommend-chapter">
+            {{ story.chapters.count }} chương
+            <span class="meta-dot">•</span>
+            <span class="view-count light">
+              <i class="fa-regular fa-eye"></i>
+              {{ story.views }}
+            </span>
+          </div>
+        </div>
+      </a>
+      {% endfor %} {% for story in recommended_stories %}
+      <a href="{% url 'story_detail' story.id %}" class="recommend-card">
+        {% if story.cover %}
+        <img src="{{ story.cover.url }}" alt="{{ story.title }}" />
+        {% else %}
+        <div class="no-cover">📖</div>
+        {% endif %}
+
+        <div class="recommend-info">
+          <div class="recommend-title">{{ story.title }}</div>
+          <div class="recommend-chapter">
+            {{ story.chapters.count }} chương
+            <span class="meta-dot">•</span>
+            <span class="view-count light">
+              <i class="fa-regular fa-eye"></i>
+              {{ story.views }}
+            </span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <button
+    class="slider-btn slider-right"
+    type="button"
+    onclick="slideRecommend(1)"
+  >
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+</div>
+
+<script>
+  function slideRecommend(dir) {
+    document.getElementById("recommendSlider").scrollBy({
+      left: dir * 240,
+      behavior: "smooth",
+    });
+  }
+</script>
+
+<!-- ⭐ TOP + TRENDING -->
+<div class="ranking-grid">
+  <div class="ranking-box">
+    <h3 class="ranking-title">
+      <span class="icon-box star"><i class="fa-solid fa-star"></i></span>
+      Top truyện
+    </h3>
+
+    {% for story in top_stories %}
+    <a href="{% url 'story_detail' story.id %}" class="ranking-item">
+      <span class="rank-number">{{ forloop.counter }}</span>
+      <span class="rank-name">{{ story.title }}</span>
+      <span class="view-count">
+        <i class="fa-regular fa-eye"></i>
+        {{ story.views }}
+      </span>
+    </a>
+    {% empty %}
+    <p class="muted">Chưa có dữ liệu</p>
+    {% endfor %}
+  </div>
+
+  <div class="ranking-box">
+    <h3 class="ranking-title">
+      <span class="icon-box trend"><i class="fa-solid fa-fire"></i></span>
+      Trending
+    </h3>
+
+    {% for story in trending_stories %}
+    <a href="{% url 'story_detail' story.id %}" class="ranking-item">
+      <span class="rank-number">{{ forloop.counter }}</span>
+      <span class="rank-name">{{ story.title }}</span>
+      <span class="view-count">
+        <i class="fa-regular fa-eye"></i>
+        {{ story.views }}
+      </span>
+    </a>
+    {% empty %}
+    <p class="muted">Chưa có dữ liệu</p>
+    {% endfor %}
+  </div>
+</div>
+
+<h2 class="section-title">Danh sách truyện</h2>
+
+<div class="story-grid">
+  {% for story in stories %}
+  <a href="{% url 'story_detail' story.id %}" class="story-card">
+    {% if story.cover %}
+    <img src="{{ story.cover.url }}" alt="{{ story.title }}" />
+    {% else %}
+    <div class="no-cover">📖</div>
+    {% endif %}
+
+    <div class="story-card-body">
+      <h3>{{ story.title }}</h3>
+      <p>{{ story.description|truncatewords:12 }}</p>
+
+      <div class="muted">
+        {{ story.author }}<br />
+        <span class="story-meta">
+          <span>{{ story.chapters.count }} chương</span>
+          <span class="meta-dot">•</span>
+          <span class="view-count">
+            <i class="fa-regular fa-eye"></i>
+            {{ story.views }}
+          </span>
+        </span>
+      </div>
+    </div>
+  </a>
+  {% empty %}
+  <p class="muted">Chưa có truyện</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

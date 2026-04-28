@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2>Xóa truyện</h2>
+
+<p>Bạn chắc chắn muốn xóa truyện này?</p>
+
+<h3>{{ story.title }}</h3>
+
+<form method="post">
+  {% csrf_token %}
+  <button class="btn" type="submit" style="background: #dc2626">
+    Xác nhận xóa
+  </button>
+</form>
+
+<br />
+
+<a href="{% url 'story_detail' story.id %}">← Hủy</a>
+
+{% endblock %}

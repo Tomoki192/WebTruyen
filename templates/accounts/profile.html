@@ -1,0 +1,87 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2 class="section-title">👤 Hồ sơ cá nhân</h2>
+
+<div
+  style="
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 25px;
+  "
+>
+  <h3>{{ user.username }}</h3>
+  <p class="muted">Email: {{ user.email|default:"Chưa có email" }}</p>
+  <p class="muted">Vai trò: {{ user.role }}</p>
+</div>
+
+<h3>❤️ Truyện đã lưu</h3>
+
+<div class="story-grid" style="margin-bottom: 30px">
+  {% for bm in bookmarks %}
+  <a href="{% url 'story_detail' bm.story.id %}" class="story-card">
+    {% if bm.story.cover %}
+    <img src="{{ bm.story.cover.url }}" alt="{{ bm.story.title }}" />
+    {% else %}
+    <div
+      style="
+        height: 200px;
+        background: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      📖
+    </div>
+    {% endif %}
+
+    <div class="story-card-body">
+      <h3>{{ bm.story.title }}</h3>
+      <p>{{ bm.story.description|truncatewords:12 }}</p>
+      <div class="muted">
+        {{ bm.story.chapters.count }} chương · 👁️ {{ bm.story.views }}
+      </div>
+    </div>
+  </a>
+  {% empty %}
+  <p class="muted">Bạn chưa lưu truyện nào.</p>
+  {% endfor %}
+</div>
+
+{% if user.role == 'uploader' %}
+<h3>📚 Truyện đã đăng</h3>
+
+<div class="story-grid">
+  {% for story in uploaded_stories %}
+  <a href="{% url 'story_detail' story.id %}" class="story-card">
+    {% if story.cover %}
+    <img src="{{ story.cover.url }}" alt="{{ story.title }}" />
+    {% else %}
+    <div
+      style="
+        height: 200px;
+        background: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      📖
+    </div>
+    {% endif %}
+
+    <div class="story-card-body">
+      <h3>{{ story.title }}</h3>
+      <p>{{ story.description|truncatewords:12 }}</p>
+      <div class="muted">
+        {{ story.chapters.count }} chương · 👁️ {{ story.views }}
+      </div>
+    </div>
+  </a>
+  {% empty %}
+  <p class="muted">Bạn chưa đăng truyện nào.</p>
+  {% endfor %}
+</div>
+{% endif %} {% endblock %}

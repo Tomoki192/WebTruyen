@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2 class="section-title">Đăng Chapter</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <label>Chọn truyện</label>
+  <select name="story" required>
+    {% for s in stories %}
+    <option value="{{ s.id }}">{{ s.title }}</option>
+    {% endfor %}
+  </select>
+
+  <label>Tên chapter</label>
+  <input type="text" name="title" placeholder="Ví dụ: Mở đầu" required />
+
+  <label>Số chapter</label>
+  <input type="number" name="chapter_number" placeholder="Ví dụ: 1" required />
+
+  <label>Nội dung chữ nếu không dùng ảnh</label>
+  <textarea
+    name="content"
+    rows="6"
+    placeholder="Nhập nội dung chapter..."
+  ></textarea>
+
+  <label>Ảnh chapter</label>
+  <input type="file" name="images" multiple />
+
+  <button class="btn" type="submit">Đăng chapter</button>
+</form>
+
+{% endblock %}

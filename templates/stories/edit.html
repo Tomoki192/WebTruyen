@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2 style="margin-bottom: 20px">✏️ Sửa truyện</h2>
+
+<form method="post" enctype="multipart/form-data" style="max-width: 600px">
+  {% csrf_token %}
+
+  <label>Tên truyện</label>
+  <input type="text" name="title" value="{{ story.title }}" required />
+
+  <label>Tác giả</label>
+  <input type="text" name="author" value="{{ story.author }}" required />
+
+  <label>Mô tả</label>
+  <textarea name="description" rows="5">{{ story.description }}</textarea>
+
+  <label>Ảnh bìa</label>
+  <input type="file" name="cover" />
+
+  {% if story.cover %}
+  <p style="margin-top: 10px">Ảnh hiện tại:</p>
+  <img src="{{ story.cover.url }}" style="width: 150px; border-radius: 8px" />
+  {% endif %}
+
+  <div style="margin-top: 20px; display: flex; gap: 10px">
+    <button class="btn" type="submit">💾 Lưu</button>
+
+    <a
+      href="{% url 'story_detail' story.id %}"
+      class="btn"
+      style="background: #6b7280"
+    >
+      Hủy
+    </a>
+  </div>
+</form>
+
+{% endblock %}

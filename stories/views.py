@@ -10,8 +10,6 @@ from .models import Story, Category, Bookmark
 def get_common_context():
     """
     Context dùng chung để base.html luôn có danh sách thể loại.
-    Vì navbar có menu Thể loại nên các trang render từ stories/views.py
-    nên truyền categories ra template.
     """
     return {
         'categories': Category.objects.all().order_by('name')
@@ -25,32 +23,32 @@ def story_list(request):
     stories = Story.objects.all()
     categories = Category.objects.all().order_by('name')
 
-    # 🔎 Tìm kiếm theo tên truyện hoặc tác giả
+    # Tìm kiếm theo tên truyện hoặc tác giả
     if query:
         stories = stories.filter(
             Q(title__icontains=query) |
             Q(author__icontains=query)
         )
 
-    # 🏷 Lọc theo thể loại
+    # Lọc theo thể loại
     if category_id:
         stories = stories.filter(categories__id=category_id)
 
-    # 🔥 Sắp xếp mặc định: mới nhất
+    # Sắp xếp mặc định: mới nhất
     stories = stories.order_by('-created_at')
 
-    # 📄 Phân trang
+    # Phân trang
     paginator = Paginator(stories, 8)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # 🔥 Truyện đề cử
+    # Truyện đề cử
     recommended_stories = Story.objects.order_by('-created_at')[:10]
 
-    # ⭐ Top truyện
+    # Top truyện
     top_stories = Story.objects.order_by('-views')[:5]
 
-    # 📈 Trending
+    # Trending
     trending_stories = Story.objects.order_by('-views', '-created_at')[:5]
 
     return render(request, 'stories/list.html', {
@@ -68,13 +66,13 @@ def story_list(request):
 def story_detail(request, story_id):
     story = get_object_or_404(Story, id=story_id)
 
-    # 🔥 Tăng lượt xem
+    # Tăng lượt xem
     story.views += 1
     story.save(update_fields=['views'])
 
     chapters = story.chapters.all().order_by('chapter_number')
 
-    # ❤️ Kiểm tra bookmark
+    # Kiểm tra bookmark
     is_bookmarked = False
     if request.user.is_authenticated:
         is_bookmarked = Bookmark.objects.filter(

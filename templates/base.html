@@ -26,7 +26,7 @@
         text-decoration: none;
       }
 
-      /* ================= NAVBAR MỚI ================= */
+      /* ================= NAVBAR ================= */
       nav {
         background: #e5e7eb;
         border-bottom: 1px solid #d1d5db;
@@ -968,48 +968,51 @@
             <div class="genre-grid">
               <div class="genre-col">
                 <a href="{% url 'home' %}" class="hot">Tất cả</a>
-                {% for cate in categories %} {% if
-                forloop.counter0|divisibleby:4 %}
-                <a href="?category={{ cate.id }}">{{ cate.name }}</a>
-                {% endif %} {% endfor %}
-                <a href="#" class="hot">Chuyển Sinh</a>
-                <a href="#" class="hot">Cổ Đại</a>
-                <a href="#" class="hot">Đam Mỹ</a>
+
+                {% for cate in categories %}
+                <a href="{% url 'home' %}?category={{ cate.id }}">
+                  {{ cate.name }}
+                </a>
+                {% empty %}
+                <a href="#">Chưa có thể loại</a>
+                {% endfor %}
               </div>
 
               <div class="genre-col">
-                {% for cate in categories %} {% if
-                forloop.counter0|add:"-1"|divisibleby:4 %}
-                <a href="?category={{ cate.id }}">{{ cate.name }}</a>
-                {% endif %} {% endfor %}
+                <a href="#" class="hot">Action</a>
+                <a href="#">Adventure</a>
+                <a href="#">Anime</a>
+                <a href="#" class="hot">Chuyển Sinh</a>
+                <a href="#">Comedy</a>
+                <a href="#">Comic</a>
+                <a href="#" class="hot">Cổ Đại</a>
+                <a href="#">Drama</a>
+                <a href="#" class="hot">Đam Mỹ</a>
+                <a href="#">Fantasy</a>
+              </div>
+
+              <div class="genre-col">
+                <a href="#">Historical</a>
+                <a href="#">Horror</a>
+                <a href="#">Manga</a>
                 <a href="#" class="hot">Manhua</a>
                 <a href="#" class="hot">Manhwa</a>
+                <a href="#">Martial Arts</a>
                 <a href="#" class="hot">Ngôn Tình</a>
                 <a href="#" class="hot">Romance</a>
+                <a href="#">School Life</a>
+                <a href="#">Sci-fi</a>
               </div>
 
               <div class="genre-col">
-                {% for cate in categories %} {% if
-                forloop.counter0|add:"-2"|divisibleby:4 %}
-                <a href="?category={{ cate.id }}">{{ cate.name }}</a>
-                {% endif %} {% endfor %}
+                <a href="#" class="hot">Tu Tiên</a>
                 <a href="#">Shoujo</a>
                 <a href="#">Shounen</a>
                 <a href="#">Slice of Life</a>
                 <a href="#">Sports</a>
                 <a href="#">Supernatural</a>
+                <a href="#">Webtoon</a>
                 <a href="#" class="hot">Xuyên Không</a>
-              </div>
-
-              <div class="genre-col">
-                {% for cate in categories %} {% if
-                forloop.counter0|add:"-3"|divisibleby:4 %}
-                <a href="?category={{ cate.id }}">{{ cate.name }}</a>
-                {% endif %} {% endfor %}
-                <a href="#" class="hot">Tu Tiên</a>
-                <a href="#">TruyenQQ</a>
-                <a href="#">BlogTruyen</a>
-                <a href="#">TeamLanhLung</a>
                 <a href="#">TopTruyện</a>
               </div>
             </div>

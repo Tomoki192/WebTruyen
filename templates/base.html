@@ -71,6 +71,10 @@
         transition: 0.2s;
         cursor: pointer;
         white-space: nowrap;
+        background: none;
+        border: none;
+        padding: 0;
+        font-family: inherit;
       }
 
       .nav-link:hover,
@@ -81,6 +85,10 @@
       .nav-link:hover i,
       .genre-toggle:hover i {
         transform: scale(1.12);
+      }
+
+      .genre-dropdown.open .genre-toggle {
+        color: #2563eb;
       }
 
       /* ================= SEARCH TRÊN NAV ================= */
@@ -153,7 +161,7 @@
         z-index: 1000;
       }
 
-      .genre-dropdown:hover .genre-menu {
+      .genre-dropdown.open .genre-menu {
         display: block;
       }
 
@@ -957,12 +965,12 @@
         </a>
         {% endif %}
 
-        <div class="genre-dropdown">
-          <div class="genre-toggle">
+        <div class="genre-dropdown" id="genreDropdown">
+          <button class="genre-toggle" type="button" id="genreToggle">
             <i class="fa-solid fa-layer-group"></i>
             Thể loại
             <i class="fa-solid fa-caret-down"></i>
-          </div>
+          </button>
 
           <div class="genre-menu">
             <div class="genre-grid">
@@ -1067,5 +1075,25 @@
     </nav>
 
     <div class="container">{% block content %}{% endblock %}</div>
+
+    <script>
+      const genreDropdown = document.getElementById("genreDropdown");
+      const genreToggle = document.getElementById("genreToggle");
+
+      if (genreDropdown && genreToggle) {
+        genreToggle.addEventListener("click", function (event) {
+          event.stopPropagation();
+          genreDropdown.classList.toggle("open");
+        });
+
+        genreDropdown.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+
+        document.addEventListener("click", function () {
+          genreDropdown.classList.remove("open");
+        });
+      }
+    </script>
   </body>
 </html>

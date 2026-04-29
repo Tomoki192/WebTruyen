@@ -33,20 +33,29 @@
   {% endif %}
 </div>
 
-<!-- ===== DANH SÁCH CHAPTER ĐẦU TRANG ===== -->
-<div class="chapter-number-box">
+<!-- ===== CHỌN CHAPTER ĐẦU TRANG ===== -->
+<div class="chapter-dropdown-box">
   <h3>Danh sách chapter</h3>
 
-  <div class="chapter-number-list">
+  <select
+    class="chapter-select"
+    onchange="if (this.value) window.location.href = this.value;"
+  >
     {% for c in all_chapters %}
-    <a
-      href="{% url 'chapter_detail' c.id %}"
-      class="chapter-number {% if c.id == chapter.id %}active{% endif %}"
+    <option
+      value="{% url 'chapter_detail' c.id %}"
+      {%
+      if
+      c.id=""
+      ="chapter.id"
+      %}selected{%
+      endif
+      %}
     >
-      {{ c.chapter_number }}
-    </a>
+      Chapter {{ c.chapter_number }}{% if c.title %} - {{ c.title }}{% endif %}
+    </option>
     {% endfor %}
-  </div>
+  </select>
 </div>
 
 <!-- ===== NỘI DUNG CHAPTER ===== -->
@@ -95,20 +104,29 @@
   {% endif %}
 </div>
 
-<!-- ===== DANH SÁCH CHAPTER CUỐI TRANG ===== -->
-<div class="chapter-number-box">
+<!-- ===== CHỌN CHAPTER CUỐI TRANG ===== -->
+<div class="chapter-dropdown-box">
   <h3>Danh sách chapter</h3>
 
-  <div class="chapter-number-list">
+  <select
+    class="chapter-select"
+    onchange="if (this.value) window.location.href = this.value;"
+  >
     {% for c in all_chapters %}
-    <a
-      href="{% url 'chapter_detail' c.id %}"
-      class="chapter-number {% if c.id == chapter.id %}active{% endif %}"
+    <option
+      value="{% url 'chapter_detail' c.id %}"
+      {%
+      if
+      c.id=""
+      ="chapter.id"
+      %}selected{%
+      endif
+      %}
     >
-      {{ c.chapter_number }}
-    </a>
+      Chapter {{ c.chapter_number }}{% if c.title %} - {{ c.title }}{% endif %}
+    </option>
     {% endfor %}
-  </div>
+  </select>
 </div>
 
 <div style="text-align: center; margin-top: 25px">

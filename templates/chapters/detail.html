@@ -51,11 +51,21 @@
 
 <!-- ===== NỘI DUNG CHAPTER ===== -->
 <div class="chapter-content">
-  {% if chapter.images.all %} {% for img in chapter.images.all %}
-  <img src="{{ img.image.url }}" class="reader-image" />
-  {% endfor %} {% else %}
+  <!-- Chữ hiện trước -->
+  {% if chapter.content %}
   <div class="chapter-text">{{ chapter.content|linebreaks }}</div>
   {% endif %}
+
+  <!-- Ảnh hiện sau -->
+  {% for img in chapter.images.all %}
+  <img
+    src="{{ img.image.url }}"
+    class="reader-image"
+    alt="{{ chapter.title }}"
+  />
+  {% empty %} {% if not chapter.content %}
+  <p class="muted">Chapter này chưa có nội dung</p>
+  {% endif %} {% endfor %}
 </div>
 
 <!-- ===== ĐIỀU HƯỚNG CUỐI TRANG ===== -->

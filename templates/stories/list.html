@@ -1,59 +1,5 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="filter-box">
-  <form method="get" style="display: flex; gap: 10px; flex-wrap: wrap">
-    <input
-      type="text"
-      name="q"
-      placeholder="Tìm truyện theo tên hoặc tác giả..."
-      value="{{ query|default:'' }}"
-      class="search-input"
-    />
-
-    {% if category_id %}
-    <input type="hidden" name="category" value="{{ category_id }}" />
-    {% endif %} {% if sort %}
-    <input type="hidden" name="sort" value="{{ sort }}" />
-    {% endif %}
-
-    <button class="btn" type="submit">
-      <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
-    </button>
-  </form>
-
-  <div class="filter-row">
-    <strong>Thể loại:</strong>
-    <a href="{% url 'home' %}" class="tag">Tất cả</a>
-
-    {% for cate in categories %}
-    <a
-      href="?category={{ cate.id }}{% if query %}&q={{ query }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
-      class="tag {% if category_id == cate.id|stringformat:'s' %}active{% endif %}"
-    >
-      {{ cate.name }}
-    </a>
-    {% endfor %}
-  </div>
-
-  <div class="filter-row">
-    <strong>Sắp xếp:</strong>
-
-    <a
-      href="?sort=new{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}"
-      class="tag {% if sort == 'new' %}active{% endif %}"
-    >
-      Mới nhất
-    </a>
-
-    <a
-      href="?sort=old{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}"
-      class="tag {% if sort == 'old' %}active{% endif %}"
-    >
-      Cũ nhất
-    </a>
-  </div>
-</div>
-
 <!-- 🔥 SLIDER -->
 <h2 class="section-title">Truyện đề cử ›</h2>
 
@@ -88,6 +34,8 @@
           </div>
         </div>
       </a>
+      {% empty %}
+      <p class="muted">Chưa có truyện đề cử</p>
       {% endfor %} {% for story in recommended_stories %}
       <a href="{% url 'story_detail' story.id %}" class="recommend-card">
         {% if story.cover %}
@@ -123,10 +71,13 @@
 
 <script>
   function slideRecommend(dir) {
-    document.getElementById("recommendSlider").scrollBy({
-      left: dir * 240,
-      behavior: "smooth",
-    });
+    const slider = document.getElementById("recommendSlider");
+    if (slider) {
+      slider.scrollBy({
+        left: dir * 240,
+        behavior: "smooth",
+      });
+    }
   }
 </script>
 
@@ -180,7 +131,7 @@
   {% if page_obj.has_previous %}
   <a
     class="btn"
-    href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+    href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}"
   >
     <i class="fa-solid fa-arrow-left"></i> Trước
   </a>
@@ -197,7 +148,7 @@
   {% if page_obj.has_next %}
   <a
     class="btn"
-    href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+    href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}"
   >
     Sau <i class="fa-solid fa-arrow-right"></i>
   </a>
@@ -244,7 +195,7 @@
   {% if page_obj.has_previous %}
   <a
     class="btn"
-    href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+    href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}"
   >
     <i class="fa-solid fa-arrow-left"></i> Trước
   </a>
@@ -261,7 +212,7 @@
   {% if page_obj.has_next %}
   <a
     class="btn"
-    href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+    href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category_id %}&category={{ category_id }}{% endif %}"
   >
     Sau <i class="fa-solid fa-arrow-right"></i>
   </a>

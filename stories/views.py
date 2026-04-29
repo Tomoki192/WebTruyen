@@ -7,43 +7,50 @@ from django.core.paginator import Paginator
 from .models import Story, Category, Bookmark
 
 
+def get_common_context():
+    """
+    Context dùng chung để base.html luôn có danh sách thể loại.
+    Vì navbar có menu Thể loại nên các trang render từ stories/views.py
+    nên truyền categories ra template.
+    """
+    return {
+        'categories': Category.objects.all().order_by('name')
+    }
+
+
 def story_list(request):
-    query = request.GET.get('q')
-    category_id = request.GET.get('category')
-    sort = request.GET.get('sort', 'new')
+    query = request.GET.get('q', '').strip()
+    category_id = request.GET.get('category', '').strip()
 
     stories = Story.objects.all()
-    categories = Category.objects.all()
+    categories = Category.objects.all().order_by('name')
 
-    # 🔎 Tìm kiếm
+    # 🔎 Tìm kiếm theo tên truyện hoặc tác giả
     if query:
         stories = stories.filter(
             Q(title__icontains=query) |
             Q(author__icontains=query)
         )
 
-    # 🏷 Lọc thể loại
+    # 🏷 Lọc theo thể loại
     if category_id:
         stories = stories.filter(categories__id=category_id)
 
-    # 🔥 Sắp xếp
-    if sort == 'old':
-        stories = stories.order_by('created_at')
-    else:
-        stories = stories.order_by('-created_at')
+    # 🔥 Sắp xếp mặc định: mới nhất
+    stories = stories.order_by('-created_at')
 
     # 📄 Phân trang
     paginator = Paginator(stories, 8)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # 🔥 TRUYỆN ĐỀ CỬ
+    # 🔥 Truyện đề cử
     recommended_stories = Story.objects.order_by('-created_at')[:10]
 
-    # ⭐ TOP TRUYỆN
+    # ⭐ Top truyện
     top_stories = Story.objects.order_by('-views')[:5]
 
-    # 📈 TRENDING
+    # 📈 Trending
     trending_stories = Story.objects.order_by('-views', '-created_at')[:5]
 
     return render(request, 'stories/list.html', {
@@ -52,7 +59,6 @@ def story_list(request):
         'categories': categories,
         'query': query,
         'category_id': category_id,
-        'sort': sort,
         'recommended_stories': recommended_stories,
         'top_stories': top_stories,
         'trending_stories': trending_stories,
@@ -62,13 +68,13 @@ def story_list(request):
 def story_detail(request, story_id):
     story = get_object_or_404(Story, id=story_id)
 
-    # 🔥 TĂNG VIEW
+    # 🔥 Tăng lượt xem
     story.views += 1
     story.save(update_fields=['views'])
 
     chapters = story.chapters.all().order_by('chapter_number')
 
-    # ❤️ CHECK BOOKMARK
+    # ❤️ Kiểm tra bookmark
     is_bookmarked = False
     if request.user.is_authenticated:
         is_bookmarked = Bookmark.objects.filter(
@@ -76,11 +82,14 @@ def story_detail(request, story_id):
             story=story
         ).exists()
 
-    return render(request, 'stories/detail.html', {
+    context = get_common_context()
+    context.update({
         'story': story,
         'chapters': chapters,
         'is_bookmarked': is_bookmarked,
     })
+
+    return render(request, 'stories/detail.html', context)
 
 
 @login_required
@@ -104,9 +113,12 @@ def my_bookmarks(request):
         user=request.user
     ).select_related('story').order_by('-created_at')
 
-    return render(request, 'stories/bookmarks.html', {
+    context = get_common_context()
+    context.update({
         'bookmarks': bookmarks
     })
+
+    return render(request, 'stories/bookmarks.html', context)
 
 
 @login_required
@@ -114,25 +126,35 @@ def create_story(request):
     if request.user.role != 'uploader':
         return HttpResponse("Bạn không có quyền đăng truyện")
 
+    categories = Category.objects.all().order_by('name')
+
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
         author = request.POST.get('author')
         cover = request.FILES.get('cover')
+        category_ids = request.POST.getlist('categories')
 
-        Story.objects.create(
+        story = Story.objects.create(
             title=title,
             description=description,
             author=author,
             cover=cover
         )
 
+        if category_ids:
+            story.categories.set(category_ids)
+
         return redirect('home')
 
-    return render(request, 'stories/create.html')
+    context = get_common_context()
+    context.update({
+        'categories': categories
+    })
+
+    return render(request, 'stories/create.html', context)
 
 
-# 🔥 SỬA TRUYỆN
 @login_required
 def edit_story(request, story_id):
     story = get_object_or_404(Story, id=story_id)
@@ -140,23 +162,35 @@ def edit_story(request, story_id):
     if request.user.role != 'uploader':
         return HttpResponse("Bạn không có quyền sửa")
 
+    categories = Category.objects.all().order_by('name')
+
     if request.method == 'POST':
         story.title = request.POST.get('title')
         story.description = request.POST.get('description')
         story.author = request.POST.get('author')
+        category_ids = request.POST.getlist('categories')
 
         if request.FILES.get('cover'):
             story.cover = request.FILES.get('cover')
 
         story.save()
+
+        if category_ids:
+            story.categories.set(category_ids)
+        else:
+            story.categories.clear()
+
         return redirect('story_detail', story_id=story.id)
 
-    return render(request, 'stories/edit.html', {
-        'story': story
+    context = get_common_context()
+    context.update({
+        'story': story,
+        'categories': categories
     })
 
+    return render(request, 'stories/edit.html', context)
 
-# 🔥 XÓA TRUYỆN
+
 @login_required
 def delete_story(request, story_id):
     story = get_object_or_404(Story, id=story_id)

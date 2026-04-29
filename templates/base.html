@@ -22,54 +22,184 @@
         color: #111827;
       }
 
-      /* ================= NAVBAR ================= */
+      a {
+        text-decoration: none;
+      }
+
+      /* ================= NAVBAR MỚI ================= */
       nav {
         background: #e5e7eb;
         border-bottom: 1px solid #d1d5db;
-        padding: 14px 40px;
+        padding: 12px 36px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 18px;
         position: sticky;
         top: 0;
-        z-index: 100;
+        z-index: 999;
       }
 
       .nav-left,
       .nav-right {
         display: flex;
         align-items: center;
-        gap: 22px;
+        gap: 20px;
         flex-wrap: wrap;
       }
 
-      nav a {
-        color: #111827;
-        text-decoration: none;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: 0.2s;
-      }
-
-      nav a:hover {
-        color: #2563eb;
-      }
-
-      nav a:hover i {
-        transform: scale(1.15);
-      }
-
       .logo {
-        font-size: 22px;
-        font-weight: bold;
+        font-size: 24px;
+        font-weight: 800;
         background: linear-gradient(135deg, #2563eb, #9333ea);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 7px;
       }
 
+      .nav-link,
+      .genre-toggle {
+        color: #111827;
+        font-weight: bold;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transition: 0.2s;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .nav-link:hover,
+      .genre-toggle:hover {
+        color: #2563eb;
+      }
+
+      .nav-link:hover i,
+      .genre-toggle:hover i {
+        transform: scale(1.12);
+      }
+
+      /* ================= SEARCH TRÊN NAV ================= */
+      .nav-search-form {
+        width: 330px;
+        max-width: 38vw;
+        display: flex;
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 999px;
+        padding: 5px 5px 5px 14px;
+        transition: 0.2s;
+      }
+
+      .nav-search-form:focus-within {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+      }
+
+      .nav-search-form input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        margin: 0;
+        padding: 0 10px;
+        height: 38px;
+        font-size: 15px;
+        color: #111827;
+      }
+
+      .nav-search-form input:focus {
+        box-shadow: none;
+      }
+
+      .nav-search-form button {
+        width: 40px;
+        height: 38px;
+        border: none;
+        border-radius: 999px;
+        background: #2563eb;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+        transition: 0.2s;
+      }
+
+      .nav-search-form button:hover {
+        background: #1d4ed8;
+      }
+
+      /* ================= MEGA MENU THỂ LOẠI ================= */
+      .genre-dropdown {
+        position: relative;
+      }
+
+      .genre-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 18px);
+        left: 0;
+        width: 820px;
+        max-width: calc(100vw - 80px);
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 18px 38px rgba(15, 23, 42, 0.18);
+        padding: 22px 24px;
+        z-index: 1000;
+      }
+
+      .genre-dropdown:hover .genre-menu {
+        display: block;
+      }
+
+      .genre-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px 28px;
+      }
+
+      .genre-col {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .genre-col:not(:last-child) {
+        border-right: 1px solid #eef2f7;
+        padding-right: 18px;
+      }
+
+      .genre-col a {
+        color: #374151;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 8px 9px;
+        border-radius: 10px;
+        transition: 0.18s;
+      }
+
+      .genre-col a:hover {
+        background: #f3f4f6;
+        color: #2563eb;
+        padding-left: 13px;
+      }
+
+      .genre-col a.hot {
+        color: #ef4444;
+        font-weight: 800;
+      }
+
+      .genre-col a.hot:hover {
+        color: #dc2626;
+        background: #fee2e2;
+      }
+
+      /* ================= LOGOUT ================= */
       .logout-form {
         display: inline;
         margin: 0;
@@ -226,7 +356,7 @@
         margin-bottom: 22px;
       }
 
-      /* ================= FILTER ================= */
+      /* ================= FILTER CŨ - GIỮ LẠI PHÒNG KHI FILE KHÁC DÙNG ================= */
       .filter-box {
         background: #f9fafb;
         border: 1px solid #e5e7eb;
@@ -692,19 +822,44 @@
       }
 
       /* ================= MOBILE ================= */
-      @media (max-width: 700px) {
+      @media (max-width: 900px) {
         nav {
           padding: 12px 18px;
-          flex-wrap: wrap;
+          flex-direction: column;
+          align-items: stretch;
           gap: 12px;
         }
 
         .nav-left,
         .nav-right {
           width: 100%;
-          justify-content: flex-start;
+          justify-content: center;
           flex-wrap: wrap;
           gap: 14px;
+        }
+
+        .nav-search-form {
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .genre-menu {
+          left: 50%;
+          transform: translateX(-50%);
+          width: calc(100vw - 28px);
+          max-width: none;
+          max-height: 70vh;
+          overflow-y: auto;
+          border-radius: 18px;
+        }
+
+        .genre-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .genre-col:not(:last-child) {
+          border-right: none;
+          padding-right: 0;
         }
 
         .container {
@@ -772,6 +927,16 @@
           font-size: 14px;
         }
       }
+
+      @media (max-width: 520px) {
+        .genre-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .story-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
 
@@ -782,29 +947,101 @@
           <i class="fa-solid fa-book-open"></i> WebTruyen
         </a>
 
-        <a href="{% url 'home' %}">
+        <a href="{% url 'home' %}" class="nav-link">
           <i class="fa-solid fa-house"></i> Trang chủ
         </a>
 
         {% if user.is_authenticated %}
-        <a href="{% url 'my_bookmarks' %}">
+        <a href="{% url 'my_bookmarks' %}" class="nav-link">
           <i class="fa-solid fa-heart"></i> Truyện đã lưu
         </a>
+        {% endif %}
 
-        {% if user.role == 'uploader' %}
-        <a href="{% url 'create_story' %}">
+        <div class="genre-dropdown">
+          <div class="genre-toggle">
+            <i class="fa-solid fa-layer-group"></i>
+            Thể loại
+            <i class="fa-solid fa-caret-down"></i>
+          </div>
+
+          <div class="genre-menu">
+            <div class="genre-grid">
+              <div class="genre-col">
+                <a href="{% url 'home' %}" class="hot">Tất cả</a>
+                {% for cate in categories %} {% if
+                forloop.counter0|divisibleby:4 %}
+                <a href="?category={{ cate.id }}">{{ cate.name }}</a>
+                {% endif %} {% endfor %}
+                <a href="#" class="hot">Chuyển Sinh</a>
+                <a href="#" class="hot">Cổ Đại</a>
+                <a href="#" class="hot">Đam Mỹ</a>
+              </div>
+
+              <div class="genre-col">
+                {% for cate in categories %} {% if
+                forloop.counter0|add:"-1"|divisibleby:4 %}
+                <a href="?category={{ cate.id }}">{{ cate.name }}</a>
+                {% endif %} {% endfor %}
+                <a href="#" class="hot">Manhua</a>
+                <a href="#" class="hot">Manhwa</a>
+                <a href="#" class="hot">Ngôn Tình</a>
+                <a href="#" class="hot">Romance</a>
+              </div>
+
+              <div class="genre-col">
+                {% for cate in categories %} {% if
+                forloop.counter0|add:"-2"|divisibleby:4 %}
+                <a href="?category={{ cate.id }}">{{ cate.name }}</a>
+                {% endif %} {% endfor %}
+                <a href="#">Shoujo</a>
+                <a href="#">Shounen</a>
+                <a href="#">Slice of Life</a>
+                <a href="#">Sports</a>
+                <a href="#">Supernatural</a>
+                <a href="#" class="hot">Xuyên Không</a>
+              </div>
+
+              <div class="genre-col">
+                {% for cate in categories %} {% if
+                forloop.counter0|add:"-3"|divisibleby:4 %}
+                <a href="?category={{ cate.id }}">{{ cate.name }}</a>
+                {% endif %} {% endfor %}
+                <a href="#" class="hot">Tu Tiên</a>
+                <a href="#">TruyenQQ</a>
+                <a href="#">BlogTruyen</a>
+                <a href="#">TeamLanhLung</a>
+                <a href="#">TopTruyện</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form method="get" action="{% url 'home' %}" class="nav-search-form">
+          <input
+            type="text"
+            name="q"
+            placeholder="Tìm truyện..."
+            value="{{ query|default:'' }}"
+          />
+          <button type="submit" title="Tìm kiếm">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+
+        {% if user.is_authenticated and user.role == 'uploader' %}
+        <a href="{% url 'create_story' %}" class="nav-link">
           <i class="fa-solid fa-pen"></i> Đăng truyện
         </a>
 
-        <a href="{% url 'create_chapter' %}">
+        <a href="{% url 'create_chapter' %}" class="nav-link">
           <i class="fa-solid fa-upload"></i> Đăng chapter
         </a>
-        {% endif %} {% endif %}
+        {% endif %}
       </div>
 
       <div class="nav-right">
         {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}">
+        <a href="{% url 'profile' %}" class="nav-link">
           <i class="fa-solid fa-user"></i> {{ user.username }}
         </a>
 
@@ -815,11 +1052,11 @@
           </button>
         </form>
         {% else %}
-        <a href="{% url 'login' %}">
+        <a href="{% url 'login' %}" class="nav-link">
           <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
         </a>
 
-        <a href="{% url 'register' %}">
+        <a href="{% url 'register' %}" class="nav-link">
           <i class="fa-solid fa-user-plus"></i> Đăng ký
         </a>
         {% endif %}

@@ -10,13 +10,18 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
       * {
         box-sizing: border-box;
       }
 
       body {
-        font-family: Arial, sans-serif;
+        font-family: "Inter", Arial, sans-serif;
         margin: 0;
         background: #f3f4f6;
         color: #111827;
@@ -63,8 +68,10 @@
       .nav-link,
       .genre-toggle {
         color: #111827;
-        font-weight: bold;
+        font-family: "Inter", Arial, sans-serif;
+        font-weight: 700;
         font-size: 16px;
+        letter-spacing: -0.2px;
         display: flex;
         align-items: center;
         gap: 7px;
@@ -74,7 +81,6 @@
         background: none;
         border: none;
         padding: 0;
-        font-family: inherit;
       }
 
       .nav-link:hover,
@@ -118,6 +124,8 @@
         padding: 0 10px;
         height: 38px;
         font-size: 15px;
+        font-family: "Inter", Arial, sans-serif;
+        font-weight: 500;
         color: #111827;
       }
 
@@ -126,6 +134,7 @@
       }
 
       .nav-search-form button {
+        font-family: "Inter", Arial, sans-serif;
         width: 40px;
         height: 38px;
         border: none;
@@ -155,9 +164,9 @@
         max-width: calc(100vw - 80px);
         background: #ffffff;
         border: 1px solid #e5e7eb;
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 18px 38px rgba(15, 23, 42, 0.18);
-        padding: 22px 24px;
+        border-radius: 0 0 22px 22px;
+        box-shadow: 0 18px 38px rgba(15, 23, 42, 0.16);
+        padding: 24px 28px;
         z-index: 1000;
       }
 
@@ -168,27 +177,30 @@
       .genre-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px 28px;
+        gap: 10px 30px;
       }
 
       .genre-col {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 4px;
       }
 
       .genre-col:not(:last-child) {
-        border-right: 1px solid #eef2f7;
-        padding-right: 18px;
+        border-right: 1px solid #e5e7eb;
+        padding-right: 22px;
       }
 
       .genre-col a {
         color: #374151;
+        font-family: "Inter", Arial, sans-serif;
         font-size: 15px;
         font-weight: 500;
-        padding: 8px 9px;
+        line-height: 1.35;
+        letter-spacing: -0.15px;
+        padding: 8px 10px;
         border-radius: 10px;
-        transition: 0.18s;
+        transition: 0.18s ease;
       }
 
       .genre-col a:hover {
@@ -199,6 +211,7 @@
 
       .genre-col a.hot {
         color: #ef4444;
+        font-size: 15px;
         font-weight: 800;
       }
 
@@ -818,6 +831,96 @@
         margin-top: 12px;
       }
 
+      /* ================= FOOTER ================= */
+      .site-footer {
+        margin-top: 40px;
+        background: #1f1f1f;
+        color: #e5e7eb;
+        border-top: 1px solid #333;
+      }
+
+      .footer-inner {
+        width: 92%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 0;
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        align-items: flex-start;
+      }
+
+      .footer-logo {
+        font-size: 30px;
+        font-weight: 900;
+        margin-bottom: 14px;
+        display: inline-block;
+        background: linear-gradient(135deg, #2563eb, #9333ea);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+      }
+
+      .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .footer-links a {
+        color: #e5e7eb;
+        font-size: 15px;
+        transition: 0.2s;
+      }
+
+      .footer-links a:hover {
+        color: #60a5fa;
+      }
+
+      .footer-note {
+        max-width: 520px;
+        color: #9ca3af;
+        font-size: 13px;
+        line-height: 1.7;
+        text-align: right;
+      }
+
+      .footer-bottom {
+        border-top: 1px solid #333;
+        padding: 12px 0;
+        text-align: center;
+        color: #9ca3af;
+        font-size: 13px;
+      }
+
+      .back-to-top {
+        position: fixed;
+        right: 22px;
+        bottom: 28px;
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        background: #1f1f1f;
+        color: #ec4899;
+        font-size: 22px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 999;
+        transition: 0.2s;
+      }
+
+      .back-to-top:hover {
+        background: #111827;
+        transform: translateY(-3px);
+      }
+
+      .back-to-top.show {
+        display: flex;
+      }
+
       /* ================= ERROR ================= */
       .error-box {
         background: #fee2e2;
@@ -933,6 +1036,16 @@
         .chapter-select {
           height: 46px;
           font-size: 14px;
+        }
+
+        .footer-inner {
+          flex-direction: column;
+          text-align: center;
+          align-items: center;
+        }
+
+        .footer-note {
+          text-align: center;
         }
       }
 
@@ -1076,6 +1189,32 @@
 
     <div class="container">{% block content %}{% endblock %}</div>
 
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-logo">WebTruyen</div>
+
+          <div class="footer-links">
+            <a href="#">Giới thiệu | Liên hệ</a>
+            <a href="#">Điều Khoản | Chính Sách Bảo Mật</a>
+            <a href="#">Cam kết tuân thủ</a>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          WebTruyen là website đọc truyện trực tuyến được xây dựng bằng Django.
+          Website hỗ trợ người dùng tìm kiếm truyện, xem danh sách truyện, đọc
+          chương, lưu truyện yêu thích và bình luận.
+        </div>
+      </div>
+
+      <div class="footer-bottom">© 2026 WebTruyen. All rights reserved.</div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop" type="button">
+      <i class="fa-solid fa-chevron-up"></i>
+    </button>
+
     <script>
       const genreDropdown = document.getElementById("genreDropdown");
       const genreToggle = document.getElementById("genreToggle");
@@ -1092,6 +1231,25 @@
 
         document.addEventListener("click", function () {
           genreDropdown.classList.remove("open");
+        });
+      }
+
+      const backToTop = document.getElementById("backToTop");
+
+      if (backToTop) {
+        window.addEventListener("scroll", function () {
+          if (window.scrollY > 300) {
+            backToTop.classList.add("show");
+          } else {
+            backToTop.classList.remove("show");
+          }
+        });
+
+        backToTop.addEventListener("click", function () {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
         });
       }
     </script>
